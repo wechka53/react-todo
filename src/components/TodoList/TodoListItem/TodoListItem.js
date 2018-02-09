@@ -28,8 +28,21 @@ export default class TodoListItem extends Component {
 
   handleDoubleClick = () => {
     this.setState({editing: true});
-    this.refs.textInput.focus();
+    setTimeout(() => {
+      this.refs.textInput.focus();
+    }, 100);
   };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.showCloseButton === this.state.showCloseButton &&
+        nextState.editing === this.state.editing &&
+        nextState.labelText === this.state.labelText) {
+      console.log(nextProps.todo.id, nextState, nextProps);
+      return false;
+    }
+    console.log(nextProps.todo.id, nextState, nextProps);
+    return true;
+  }
 
   handleOnChange = (event) => {
     this.setState({labelText: event.target.value});
@@ -42,7 +55,7 @@ export default class TodoListItem extends Component {
     });
   };
 
-  updateTodo (newValue) {
+  updateTodo(newValue) {
     this.props.updateTodo(
         {
           id: this.props.todo.id,
@@ -94,7 +107,6 @@ export default class TodoListItem extends Component {
               onChange={this.handleOnChange}
               onBlur={this.inputLostFocus}
               onKeyPress={this.handleKeyPress}
-              autoFocus
           />
         </div>
     );
