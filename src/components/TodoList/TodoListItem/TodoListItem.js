@@ -27,32 +27,40 @@ export default class TodoListItem extends Component {
             onMouseEnter={ this.handleMouseEnter }
             onMouseLeave={ this.handleMouseLeave }
         >
-          <div className='label'>
-            <label
-                onDoubleClick={ this.handleDoubleClick }
-            >
-              { this.props.todo.name }
-            </label>
+          {
+            !this.state.editing &&
 
-            <button
-                className={
-                  classNames(
-                      'destroy',
-                      {visible: this.state.showCloseButton}
-                  ) }
-                onClick={ this.handleRemoveItem }
+            <div className='label'>
+              <label
+                  onDoubleClick={ this.handleDoubleClick }
+              >
+                { this.props.todo.name }
+              </label>
+
+              <button
+                  className={
+                    classNames(
+                        'destroy',
+                        {visible: this.state.showCloseButton}
+                    ) }
+                  onClick={ this.handleRemoveItem }
+              />
+            </div>
+          }
+
+          {
+            this.state.editing &&
+
+            <input
+                type='text'
+                className='edit'
+                ref='textInput'
+                value={ this.state.labelText }
+                onChange={ this.handleOnChange }
+                onBlur={ this.inputLostFocus }
+                onKeyPress={ this.handleKeyPress }
             />
-          </div>
-
-          <input
-              type='text'
-              className='edit'
-              ref='textInput'
-              value={ this.state.labelText }
-              onChange={ this.handleOnChange }
-              onBlur={ this.inputLostFocus }
-              onKeyPress={ this.handleKeyPress }
-          />
+          }
         </div>
     );
   }
