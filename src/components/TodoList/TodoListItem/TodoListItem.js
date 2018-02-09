@@ -1,17 +1,60 @@
-import React, { Component } from 'react'
-import './TodoListItem.css';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import classNames from 'classnames';
+
+import './TodoListItem.css';
 
 export default class TodoListItem extends Component {
   constructor(props) {
     super(props);
 
-
     this.state = {
       showCloseButton: false,
       editing: false,
-      labelText: this.props.todo.name
+      labelText: this.props.todo.name,
     };
+  }
+
+  render() {
+    return (
+        <div
+            className={
+              classNames(
+                  'todo-list__item',
+                  {editing: this.state.editing}
+              ) }
+            onMouseEnter={ this.handleMouseEnter }
+            onMouseLeave={ this.handleMouseLeave }
+        >
+          <div className='label'>
+            <label
+                onDoubleClick={ this.handleDoubleClick }
+            >
+              { this.props.todo.name }
+            </label>
+
+            <button
+                className={
+                  classNames(
+                      'destroy',
+                      {visible: this.state.showCloseButton}
+                  ) }
+                onClick={ this.handleRemoveItem }
+            />
+          </div>
+
+          <input
+              type='text'
+              className='edit'
+              ref='textInput'
+              value={ this.state.labelText }
+              onChange={ this.handleOnChange }
+              onBlur={ this.inputLostFocus }
+              onKeyPress={ this.handleKeyPress }
+          />
+        </div>
+    );
   }
 
   handleRemoveItem = () => {
@@ -33,82 +76,36 @@ export default class TodoListItem extends Component {
     }, 100);
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextState.showCloseButton === this.state.showCloseButton &&
-        nextState.editing === this.state.editing &&
-        nextState.labelText === this.state.labelText) {
-      console.log(nextProps.todo.id, nextState, nextProps);
-      return false;
-    }
-    console.log(nextProps.todo.id, nextState, nextProps);
-    return true;
-  }
-
-  handleOnChange = (event) => {
+  handleOnChange = event => {
     this.setState({labelText: event.target.value});
   };
 
   inputLostFocus = () => {
     this.setState({
       editing: false,
-      labelText: this.props.todo.name
+      labelText: this.props.todo.name,
     });
   };
 
-  updateTodo(newValue) {
-    this.props.updateTodo(
-        {
-          id: this.props.todo.id,
-          name: newValue
-        }
-    );
-  }
-
-  handleKeyPress = (event) => {
+  handleKeyPress = event => {
     if (event.key === 'Enter') {
       this.updateTodo(event.target.value);
       this.setState({editing: false});
     }
   };
 
-  render() {
-    return (
-        <div
-            className={
-              classNames(
-                  'todo-list__item',
-                  {editing: this.state.editing}
-              )}
-            onMouseEnter={this.handleMouseEnter}
-            onMouseLeave={this.handleMouseLeave}
-        >
-          <div className="label">
-            <label
-                onDoubleClick={this.handleDoubleClick}
-            >
-              {this.props.todo.name}
-            </label>
-
-            <button
-                className={
-                  classNames(
-                      'destroy',
-                      {visible: this.state.showCloseButton}
-                  )}
-                onClick={this.handleRemoveItem}
-            />
-          </div>
-
-          <input
-              type="text"
-              className="edit"
-              ref="textInput"
-              value={this.state.labelText}
-              onChange={this.handleOnChange}
-              onBlur={this.inputLostFocus}
-              onKeyPress={this.handleKeyPress}
-          />
-        </div>
+  updateTodo(newValue) {
+    this.props.updateTodo(
+        {
+          id: this.props.todo.id,
+          name: newValue,
+        }
     );
   }
 }
+
+TodoListItem.propTypes = {
+  todo: PropTypes.object,
+  removeTodo: PropTypes.func,
+  updateTodo: PropTypes.func,
+};

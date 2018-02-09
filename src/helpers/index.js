@@ -1,5 +1,5 @@
-import getRandomInt  from "./getRandomInt";
+import getRandomInt  from './getRandomInt';
 
 export  {
-  getRandomInt
+  getRandomInt,
 };
