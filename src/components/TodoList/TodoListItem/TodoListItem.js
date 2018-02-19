@@ -12,7 +12,7 @@ export default class TodoListItem extends Component {
     this.state = {
       showCloseButton: false,
       editing: false,
-      labelText: this.props.todo.name,
+      labelText: this.props.text,
     };
   }
 
@@ -34,7 +34,7 @@ export default class TodoListItem extends Component {
               <label
                   onDoubleClick={ this.handleDoubleClick }
               >
-                { this.props.todo.name }
+                { this.props.text }
               </label>
 
               <button
@@ -66,7 +66,7 @@ export default class TodoListItem extends Component {
   }
 
   handleRemoveItem = () => {
-    this.props.removeTodo(this.props.todo.id);
+    this.props.removeTodo(this.props.id);
   };
 
   handleMouseEnter = () => {
@@ -91,7 +91,7 @@ export default class TodoListItem extends Component {
   inputLostFocus = () => {
     this.setState({
       editing: false,
-      labelText: this.props.todo.name,
+      labelText: this.props.text,
     });
   };
 
@@ -104,16 +104,15 @@ export default class TodoListItem extends Component {
 
   updateTodo(newValue) {
     this.props.updateTodo(
-        {
-          id: this.props.todo.id,
-          name: newValue,
-        }
+          this.props.id,
+          newValue
     );
   }
 }
 
 TodoListItem.propTypes = {
-  todo: PropTypes.object,
+  id: PropTypes.number,
+  text: PropTypes.string,
   removeTodo: PropTypes.func,
   updateTodo: PropTypes.func,
 };

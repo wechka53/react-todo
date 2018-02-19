@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { getRandomInt } from 'helpers'
-
 import './TodoForm.css'
 
 export default class TodoForm extends Component {
@@ -29,10 +27,7 @@ export default class TodoForm extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    this.props.handleUpdate({
-      id: getRandomInt(0, 10000000000),
-      name: this.state.value,
-    });
+    this.props.handleUpdate(this.state.value);
 
     this.setState({value: ''});
   };

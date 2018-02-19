@@ -1,48 +1,34 @@
 import React, { Component } from 'react'
-import TodoListItem from "./TodoListItem/TodoListItem";
-import TodoForm from "./TodoInput/TodoForm";
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux';
+
+import TodoListItem from './TodoListItem/TodoListItem';
+import TodoForm from './TodoInput/TodoForm';
+import addTodo from 'actions/add-todo';
+import removeTodo from 'actions/remove-todo';
+
 import './TodoList.css';
+import updateTodo from "../../actions/update-todo";
 
-export default class TodoList extends Component {
-
-  constructor(props) {
-    super(props);
-
-    let todos = [
-      {
-        id: 1,
-        name: 'test1',
-      },
-      {
-        id: 2,
-        name: 'test2',
-      },
-    ];
-
-    let inputValue = '';
-
-    this.state = {todos, inputValue};
-
-
-  }
+class TodoList extends Component {
 
   render() {
     return (
         <div className='todo-list--wrapper'>
           <h2>Todo's</h2>
-          <TodoForm handleUpdate={ this.addTodo }/>
+          <TodoForm handleUpdate={ this.props.addTodo }/>
 
           <div className='todo-list'>
             {
-              this.state.todos
+              this.props.todos
                   .slice(0)
                   .reverse()
                   .map(todo =>
                       <TodoListItem
                           key={ todo.id }
-                          todo={ todo }
-                          removeTodo={ this.removeTodo }
-                          updateTodo={ this.updateTodo }
+                          { ...todo }
+                          removeTodo={ this.props.removeTodo }
+                          updateTodo={ this.props.updateTodo }
                       />
                   )
             }
@@ -51,16 +37,8 @@ export default class TodoList extends Component {
     );
   }
 
-  addTodo = todo => {
-    let todos = this.state.todos;
-
-    todos.push(todo);
-
-    this.setState({todos});
-  };
-
   updateTodo = newTodo => {
-    let todos = this.state.todos;
+    let todos = this.props.todos;
 
     todos = todos.map(todo => {
       if (todo.id === newTodo.id) {
@@ -81,3 +59,24 @@ export default class TodoList extends Component {
     this.setState({todos});
   };
 }
+
+TodoList.propTypes = {
+  addTodo: PropTypes.func,
+  removeTodo: PropTypes.func,
+};
+
+function mapStateToProps(state) {
+  return {
+    todos: state.todos,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    addTodo: text => dispatch(addTodo(text)),
+    removeTodo: id => dispatch(removeTodo(id)),
+    updateTodo: (id, newValue) => dispatch(updateTodo(id, newValue)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
