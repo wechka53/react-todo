@@ -6,6 +6,13 @@ import classNames from 'classnames';
 import './TodoListItem.css';
 
 export default class TodoListItem extends Component {
+  static propTypes = {
+    id: PropTypes.number,
+    text: PropTypes.string,
+    removeTodo: PropTypes.func,
+    updateTodo: PropTypes.func,
+  };
+
   constructor(props) {
     super(props);
 
@@ -104,15 +111,8 @@ export default class TodoListItem extends Component {
 
   updateTodo(newValue) {
     this.props.updateTodo(
-          this.props.id,
-          newValue
+        this.props.id,
+        newValue
     );
   }
 }
-
-TodoListItem.propTypes = {
-  id: PropTypes.number,
-  text: PropTypes.string,
-  removeTodo: PropTypes.func,
-  updateTodo: PropTypes.func,
-};

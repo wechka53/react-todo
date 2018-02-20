@@ -4,6 +4,10 @@ import PropTypes from 'prop-types';
 import './TodoForm.css'
 
 export default class TodoForm extends Component {
+  static propTypes = {
+    handleUpdate: PropTypes.func,
+  };
+
   constructor(props) {
     super(props);
 
@@ -28,7 +32,6 @@ export default class TodoForm extends Component {
     event.preventDefault();
 
     this.props.handleUpdate(this.state.value);
-
     this.setState({value: ''});
   };
 
@@ -36,7 +39,3 @@ export default class TodoForm extends Component {
     this.setState({value: event.target.value});
   };
 }
-
-TodoForm.propTypes = {
-  handleUpdate: PropTypes.func,
-};
