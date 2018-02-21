@@ -10,7 +10,7 @@ import updateTodo from 'actions/update-todo';
 
 import './TodoList.css';
 
-class TodoList extends Component {
+export class TodoList extends Component {
   static propTypes = {
     todos: PropTypes.arrayOf(PropTypes.object),
     addTodo: PropTypes.func,
